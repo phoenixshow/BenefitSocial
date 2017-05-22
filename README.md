@@ -1,4 +1,5 @@
 # BenefitSocial
-    IM类项目，用环信SDK集成
+    An IM social App.
 
-主要代码来自大海哥（miaochuanhai）
+1. 即时通讯类项目，主要代码来自大海哥（miaochuanhai）
+2. 使用v3.3.2版环信
