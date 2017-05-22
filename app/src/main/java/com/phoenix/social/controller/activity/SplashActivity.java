@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.hyphenate.chat.EMClient;
 import com.phoenix.social.R;
+import com.phoenix.social.model.Model;
 
 /**
  * 欢迎页面
@@ -29,6 +30,7 @@ public class SplashActivity extends AppCompatActivity {
 
     //判断进入主页面还是登录页面
     private void toMainOrLogin() {
+        /*//开启子线程
         new Thread(){
             @Override
             public void run() {
@@ -48,7 +50,29 @@ public class SplashActivity extends AppCompatActivity {
                 //结束当前页面
                 finish();
             }
-        }.start();
+        }.start();*/
+
+        //使用线程池
+        Model.getInstance().getGlobalThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                //判断当前账号是否已经登录过
+                if (EMClient.getInstance().isLoggedInBefore()){//登录过
+                    //获取到当前登录用户的信息
+
+                    //跳转到主页面
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }else {//没登录过
+                    //跳转到登录页面
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+
+                //结束当前页面
+                finish();
+            }
+        });
     }
 
     @Override
