@@ -7,3 +7,7 @@
 /build
 /captures
 .externalNativeBuild
+build
+easeui/build
+/import-summary.txt
+.idea
