@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.hyphenate.chat.EMClient;
 import com.phoenix.social.R;
 import com.phoenix.social.model.Model;
+import com.phoenix.social.model.bean.UserInfo;
 
 /**
  * 欢迎页面
@@ -59,10 +60,16 @@ public class SplashActivity extends AppCompatActivity {
                 //判断当前账号是否已经登录过
                 if (EMClient.getInstance().isLoggedInBefore()){//登录过
                     //获取到当前登录用户的信息
-
-                    //跳转到主页面
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    UserInfo account = Model.getInstance().getUserAccountDao().getAccountByHxId(EMClient.getInstance().getCurrentUser());
+                    if (account == null){
+                        //跳转到登录页面
+                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }else {
+                        //跳转到主页面
+                        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
                 }else {//没登录过
                     //跳转到登录页面
                     Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
