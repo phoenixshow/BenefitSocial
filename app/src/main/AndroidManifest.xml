@@ -70,7 +70,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".controller.activity.LoginActivity"></activity>
+        <activity android:name=".controller.activity.LoginActivity" />
+        <activity android:name=".controller.activity.AddContactActivity"></activity>
     </application>
 
 </manifest>
