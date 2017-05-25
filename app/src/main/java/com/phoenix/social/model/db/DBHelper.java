@@ -5,13 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.phoenix.social.model.dao.ContactTable;
-
-import static android.R.attr.version;
+import com.phoenix.social.model.dao.InviteTable;
 
 /**
  * Created by flashing on 2017/5/24.
  */
-
 public class DBHelper extends SQLiteOpenHelper {
     public DBHelper(Context context, String name) {
         super(context, name, null, 1);
@@ -23,6 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(ContactTable.CREATE_TAB);
 
         //创建邀请信息的表
+        db.execSQL(InviteTable.CREATE_TAB);
     }
 
     @Override
