@@ -2,7 +2,9 @@ package com.phoenix.social.model;
 
 import android.content.Context;
 
+import com.phoenix.social.model.bean.UserInfo;
 import com.phoenix.social.model.dao.UserAccountDao;
+import com.phoenix.social.model.db.DBManager;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -17,6 +19,7 @@ public class Model {
     private ExecutorService executors = Executors.newCachedThreadPool();//线程池分四种，这种模式时间比较短，如果线程长时间不用就回收了
     //创建对象
     private static Model model = new Model();
+    private DBManager dbManager;
 
     //私有化构造
     private Model() {
@@ -40,9 +43,23 @@ public class Model {
     }
 
     //用户登录成功后的处理方法
-    public void loginSuccess() {
+    public void loginSuccess(UserInfo account) {
+        //校验
+        if (account == null){
+            return;
+        }
 
+        if (dbManager != null){
+            dbManager.close();
+        }
+
+        dbManager = new DBManager(mContext, account.getName());
     }
+
+    public DBManager getDbManager() {
+        return dbManager;
+    }
+
     //获取用户账号数据库的操作类对象
     public UserAccountDao getUserAccountDao(){
         return userAccountDao;
