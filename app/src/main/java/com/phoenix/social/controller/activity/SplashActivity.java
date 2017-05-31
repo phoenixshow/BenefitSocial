@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
  */
 
 public class SplashActivity extends AppCompatActivity {
+    private boolean isGrant = true;
     private final int SDK_PERMISSION_REQUEST = 127;
     private Handler handler = new Handler(){
         @Override
@@ -114,6 +116,12 @@ public class SplashActivity extends AppCompatActivity {
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
                 permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
+            if(checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                permissions.add(Manifest.permission.CAMERA);
+            }
+            if(checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+                permissions.add(Manifest.permission.RECORD_AUDIO);
+            }
 
             if (permissions.size() > 0) {
                 requestPermissions(permissions.toArray(new String[permissions.size()]), SDK_PERMISSION_REQUEST);
@@ -133,13 +141,23 @@ public class SplashActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
             case SDK_PERMISSION_REQUEST:
-                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults.length>0){
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                            isGrant = false;
+                            break;
+                        }
+                    }
+                }else{
+                    isGrant = false;
+                }
+                if (isGrant){
                     // 允许
                     //判断进入主页面还是登录页面
                     toMainOrLogin();
-                }else{
+                }else {
                     // 不允许
-                    Toast.makeText(this, "已拒绝授权", Toast.LENGTH_LONG);
+                    Toast.makeText(this, "已拒绝授权", Toast.LENGTH_LONG).show();
                 }
                 break;
         }
