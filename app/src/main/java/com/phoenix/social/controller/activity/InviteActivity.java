@@ -1,5 +1,10 @@
 package com.phoenix.social.controller.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -11,6 +16,7 @@ import com.phoenix.social.R;
 import com.phoenix.social.controller.adapter.InviteAdapter;
 import com.phoenix.social.model.Model;
 import com.phoenix.social.model.bean.InvitationInfo;
+import com.phoenix.social.utils.Constant;
 
 import java.util.List;
 
@@ -18,6 +24,14 @@ import java.util.List;
 public class InviteActivity extends AppCompatActivity {
     private ListView lv_invite;
     private InviteAdapter inviteAdapter;
+    private LocalBroadcastManager mLBM;
+    private BroadcastReceiver contactInviteChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //刷新页面
+            refresh();
+        }
+    };
     private InviteAdapter.OnInviteListener mOnInviteListener = new InviteAdapter.OnInviteListener() {
         @Override
         public void onAccept(final InvitationInfo invitationInfo) {
@@ -101,6 +115,10 @@ public class InviteActivity extends AppCompatActivity {
 
         //刷新方法
         refresh();
+
+        //注册邀请信息变化的广播
+        mLBM = LocalBroadcastManager.getInstance(this);
+        mLBM.registerReceiver(contactInviteChangedReceiver, new IntentFilter(Constant.CONTACT_INVITE_CHANGED));
     }
 
     private void refresh() {
@@ -113,5 +131,11 @@ public class InviteActivity extends AppCompatActivity {
 
     private void initView() {
         lv_invite = (ListView) findViewById(R.id.lv_invite);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLBM.unregisterReceiver(contactInviteChangedReceiver);
     }
 }
