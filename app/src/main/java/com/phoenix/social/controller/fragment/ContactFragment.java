@@ -21,6 +21,7 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.phoenix.social.R;
 import com.phoenix.social.controller.activity.AddContactActivity;
 import com.phoenix.social.controller.activity.ChatActivity;
+import com.phoenix.social.controller.activity.GroupListActivity;
 import com.phoenix.social.controller.activity.InviteActivity;
 import com.phoenix.social.model.Model;
 import com.phoenix.social.model.bean.UserInfo;
@@ -79,9 +80,22 @@ public class ContactFragment extends EaseContactListFragment {
         setContactListItemClickListener(new EaseContactListItemClickListener() {
             @Override
             public void onListItemClicked(EaseUser user) {
+                if (user == null){
+                    return;
+                }
                 Intent intent = new Intent(getActivity(), ChatActivity.class);
                 //传递参数
                 intent.putExtra(EaseConstant.EXTRA_USER_ID, user.getUsername());
+                startActivity(intent);
+            }
+        });
+
+        //跳转到群组列表页面
+        LinearLayout ll_contact_group = (LinearLayout) headerView.findViewById(R.id.ll_contact_group);
+        ll_contact_group.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), GroupListActivity.class);
                 startActivity(intent);
             }
         });
