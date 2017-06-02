@@ -25,7 +25,7 @@ public class InviteActivity extends AppCompatActivity {
     private ListView lv_invite;
     private InviteAdapter inviteAdapter;
     private LocalBroadcastManager mLBM;
-    private BroadcastReceiver contactInviteChangedReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver inviteChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //刷新页面
@@ -118,7 +118,8 @@ public class InviteActivity extends AppCompatActivity {
 
         //注册邀请信息变化的广播
         mLBM = LocalBroadcastManager.getInstance(this);
-        mLBM.registerReceiver(contactInviteChangedReceiver, new IntentFilter(Constant.CONTACT_INVITE_CHANGED));
+        mLBM.registerReceiver(inviteChangedReceiver, new IntentFilter(Constant.CONTACT_INVITE_CHANGED));
+        mLBM.registerReceiver(inviteChangedReceiver, new IntentFilter(Constant.GROUP_INVITE_CHANGED));
     }
 
     private void refresh() {
@@ -136,6 +137,6 @@ public class InviteActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mLBM.unregisterReceiver(contactInviteChangedReceiver);
+        mLBM.unregisterReceiver(inviteChangedReceiver);
     }
 }

@@ -42,6 +42,7 @@ public class ContactFragment extends EaseContactListFragment {
     private ImageView iv_contact_red;
     private LocalBroadcastManager mLBM;
     private LinearLayout ll_contact_invite;
+    private String mHxid;
     private BroadcastReceiver contactInviteChangeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -57,7 +58,14 @@ public class ContactFragment extends EaseContactListFragment {
             refreshContact();
         }
     };
-    private String mHxid;
+    private BroadcastReceiver groupChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //更新红点显示
+            iv_contact_red.setVisibility(View.VISIBLE);
+            SpUtils.getInstance().save(SpUtils.IS_NEW_INVITE, true);
+        }
+    };
 
     @Override
     protected void initView() {
@@ -136,6 +144,7 @@ public class ContactFragment extends EaseContactListFragment {
         mLBM = LocalBroadcastManager.getInstance(getActivity());
         mLBM.registerReceiver(contactInviteChangeReceiver, new IntentFilter(Constant.CONTACT_INVITE_CHANGED));
         mLBM.registerReceiver(contactChangeReceiver, new IntentFilter(Constant.CONTACT_CHANGED));
+        mLBM.registerReceiver(groupChangeReceiver, new IntentFilter(Constant.GROUP_INVITE_CHANGED));
 
         //从环信服务器获取所有的联系人信息
         getContactFromHxServer();
@@ -275,5 +284,6 @@ public class ContactFragment extends EaseContactListFragment {
         super.onDestroy();
         mLBM.unregisterReceiver(contactInviteChangeReceiver);
         mLBM.unregisterReceiver(contactChangeReceiver);
+        mLBM.unregisterReceiver(groupChangeReceiver);
     }
 }
