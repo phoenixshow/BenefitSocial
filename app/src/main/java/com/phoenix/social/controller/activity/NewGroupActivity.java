@@ -89,6 +89,9 @@ public class NewGroupActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Toast.makeText(NewGroupActivity.this, "创建群成功", Toast.LENGTH_SHORT).show();
+
+                            //结束当前页面
+                            finish();
                         }
                     });
                 } catch (HyphenateException e) {
