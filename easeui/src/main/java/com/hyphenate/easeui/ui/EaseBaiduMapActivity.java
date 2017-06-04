@@ -238,6 +238,11 @@ public class EaseBaiduMapActivity extends EaseBaseActivity {
 			mBaiduMap.animateMapStatus(u);
 		}
 
+		@Override
+		public void onConnectHotSpotMessage(String s, int i) {
+
+		}
+
 		public void onReceivePoi(BDLocation poiLocation) {
 			if (poiLocation == null) {
 				return;

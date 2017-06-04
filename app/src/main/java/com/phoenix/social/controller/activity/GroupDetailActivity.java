@@ -129,9 +129,6 @@ public class GroupDetailActivity extends AppCompatActivity {
                         if (groupDetailAdapter.ismIsDeleteModel()){
                             //切换为非删除模式
                             groupDetailAdapter.setmIsDeleteModel(false);
-
-                            //刷新页面
-                            groupDetailAdapter.notifyDataSetChanged();
                         }
                         break;
                 }

@@ -183,8 +183,17 @@ public class InviteAdapter extends BaseAdapter {
                 case GROUP_ACCEPT_INVITE:
                     holder.reason.setText("您接受了群邀请");
                     break;
-                case GROUP_ACCEPT_APPLICATION:
-                    holder.reason.setText("您批准了群加入");
+                case USER_REMOVED:
+                    holder.reason.setText("您已被该群删除");
+                    break;
+                case GROUP_DESTROYED:
+                    holder.reason.setText("群组被解散");
+                    break;
+                case GROUP_MEMBER_JOINED:
+                    holder.reason.setText("有新成员入群");
+                    break;
+                case GROUP_MEMBER_EXITED:
+                    holder.reason.setText("群成员退出");
                     break;
             }
         }

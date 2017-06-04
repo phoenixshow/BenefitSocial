@@ -116,14 +116,32 @@ public class EventListener {
         }
         //收到 群成员被删除
         @Override
-        public void onUserRemoved(String groupId, String groupName) {}
+        public void onUserRemoved(String groupId, String groupName) {
+            updateDB(null, null, groupName, groupId, groupName, InvitationInfo.InvitationStatus.USER_REMOVED);//groupName作为解散人
+            showReadAndSendBroadcast(Constant.GROUP_INVITE_CHANGED);
+        }
         //收到 群被解散
         @Override
-        public void onGroupDestroyed(String groupId, String groupName) {}
+        public void onGroupDestroyed(String groupId, String groupName) {
+            updateDB(null, null, groupName, groupId, groupName, InvitationInfo.InvitationStatus.GROUP_DESTROYED);//groupName作为解散人
+            showReadAndSendBroadcast(Constant.GROUP_INVITE_CHANGED);
+        }
         //接收邀请时自动加入到群组的通知
         @Override
         public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
             updateDB(null, inviteMessage, groupId, groupId, inviter, InvitationInfo.InvitationStatus.GROUP_INVITE_ACCEPTED);//groupId作为群名称，inviter邀请人
+            showReadAndSendBroadcast(Constant.GROUP_INVITE_CHANGED);
+        }
+        //群组加入新成员通知
+        @Override
+        public void onMemberJoined(final String groupId,  final String member){
+            updateDB(null, null, groupId, groupId, member, InvitationInfo.InvitationStatus.GROUP_MEMBER_JOINED);//groupId作为群名称，member群退者
+            showReadAndSendBroadcast(Constant.GROUP_INVITE_CHANGED);
+        }
+        //群成员退出通知
+        @Override
+        public void onMemberExited(final String groupId, final String member) {
+            updateDB(null, null, groupId, groupId, member, InvitationInfo.InvitationStatus.GROUP_MEMBER_EXITED);//groupId作为群名称，member群退者
             showReadAndSendBroadcast(Constant.GROUP_INVITE_CHANGED);
         }
         //成员禁言的通知
@@ -141,12 +159,6 @@ public class EventListener {
         //群所有者变动通知
         @Override
         public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {}
-        //群组加入新成员通知
-        @Override
-        public void onMemberJoined(final String groupId,  final String member){}
-        //群成员退出通知
-        @Override
-        public void onMemberExited(final String groupId, final String member) {}
         //群公告变动通知
         @Override
         public void onAnnouncementChanged(String groupId, String announcement) {}

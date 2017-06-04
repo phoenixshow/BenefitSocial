@@ -68,7 +68,11 @@ public class InvitationInfo {
         GROUP_REJECT_INVITE,//拒绝了群邀请
         GROUP_REJECT_APPLICATION,//拒绝了群申请加入
         GROUP_INVITE_DECLINED,//群邀请被对方拒绝
-        GROUP_APPLICATION_DECLINED;//群申请被拒绝
+        GROUP_APPLICATION_DECLINED,//群申请被拒绝
+        USER_REMOVED,//群成员被删除
+        GROUP_DESTROYED,//群被解散
+        GROUP_MEMBER_JOINED,//群组加入新成员
+        GROUP_MEMBER_EXITED;//群成员退出
 
         public static InvitationStatus valueOf(int ordinal) {
             if (ordinal < 0 || ordinal >= values().length) {
