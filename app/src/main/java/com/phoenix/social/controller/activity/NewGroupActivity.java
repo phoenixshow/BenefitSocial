@@ -67,6 +67,7 @@ public class NewGroupActivity extends AppCompatActivity {
                 //去环信服务器创建群
                 EMGroupManager.EMGroupOptions options = new EMGroupManager.EMGroupOptions();
                 options.maxUsers = 200;//群最多容纳多少人
+                options.inviteNeedConfirm = true;//需要用户同意才能加群
                 EMGroupManager.EMGroupStyle groupStyle = null;
                 if (cb_newgroup_public.isChecked()){//公开
                     if (cb_newgroup_invite.isChecked()){//开放群邀请
@@ -83,7 +84,7 @@ public class NewGroupActivity extends AppCompatActivity {
                 }
                 options.style = groupStyle;//创建群的类型
                 try {
-                    //参数一：群名称，二：群描述，三：群成员，四：创建群的原因，五：参数设置
+                    //参数一：群名称，二：群描述，三：初始群成员，四：创建群的原因，五：参数设置
                     EMClient.getInstance().groupManager().createGroup(groupName, groupDesc, members, "申请加入群", options);
                     runOnUiThread(new Runnable() {
                         @Override

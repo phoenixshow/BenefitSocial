@@ -78,112 +78,84 @@ public class EventListener {
 
     //群信息变化的监听
     private final EMGroupChangeListener emGroupChangeListener = new EMGroupChangeListener() {
+        //接收到群组加入邀请
         @Override
         public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
-            //接收到群组加入邀请
             updateDB(null, reason, groupName, groupId, inviter, InvitationInfo.InvitationStatus.NEW_GROUP_INVITE);//inviter邀请人
             showReadAndSendBroadcast(Constant.GROUP_INVITE_CHANGED);
         }
-
+        //用户申请加入群
         @Override
         public void onRequestToJoinReceived(String groupId, String groupName, String applyer, String reason) {
-            //用户申请加入群
             updateDB(null, reason, groupName, groupId, applyer, InvitationInfo.InvitationStatus.NEW_GROUP_APPLICATION);//applyer申请人
             showReadAndSendBroadcast(Constant.GROUP_INVITE_CHANGED);
         }
-
+        //加群申请被同意
         @Override
         public void onRequestToJoinAccepted(String groupId, String groupName, String accepter) {
-            //加群申请被同意
             updateDB(null, null, groupName, groupId, accepter, InvitationInfo.InvitationStatus.GROUP_APPLICATION_ACCEPTED);//accepter接收人
             showReadAndSendBroadcast(Constant.GROUP_INVITE_CHANGED);
         }
-
+        //加群申请被拒绝
         @Override
         public void onRequestToJoinDeclined(String groupId, String groupName, String decliner, String reason) {
-            //加群申请被拒绝
             updateDB(null, reason, groupName, groupId, decliner, InvitationInfo.InvitationStatus.GROUP_APPLICATION_DECLINED);//decliner拒绝人
             showReadAndSendBroadcast(Constant.GROUP_INVITE_CHANGED);
         }
-
+        //群组邀请被同意
         @Override
         public void onInvitationAccepted(String groupId, String inviter, String reason) {
-            //群组邀请被同意
             updateDB(null, reason, groupId, groupId, inviter, InvitationInfo.InvitationStatus.GROUP_INVITE_ACCEPTED);//groupId作为群名称，inviter邀请人
             showReadAndSendBroadcast(Constant.GROUP_INVITE_CHANGED);
         }
-
+        //群组邀请被拒绝
         @Override
         public void onInvitationDeclined(String groupId, String invitee, String reason) {
-            //群组邀请被拒绝
             updateDB(null, reason, groupId, groupId, invitee, InvitationInfo.InvitationStatus.GROUP_INVITE_DECLINED);//groupId作为群名称，invitee受邀者
             showReadAndSendBroadcast(Constant.GROUP_INVITE_CHANGED);
         }
-
+        //收到 群成员被删除
         @Override
-        public void onUserRemoved(String groupId, String groupName) {
-            //收到 群成员被删除
-        }
-
+        public void onUserRemoved(String groupId, String groupName) {}
+        //收到 群被解散
         @Override
-        public void onGroupDestroyed(String groupId, String groupName) {
-            //收到 群被解散
-        }
-
+        public void onGroupDestroyed(String groupId, String groupName) {}
+        //接收邀请时自动加入到群组的通知
         @Override
         public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
-            //接收邀请时自动加入到群组的通知
             updateDB(null, inviteMessage, groupId, groupId, inviter, InvitationInfo.InvitationStatus.GROUP_INVITE_ACCEPTED);//groupId作为群名称，inviter邀请人
             showReadAndSendBroadcast(Constant.GROUP_INVITE_CHANGED);
         }
-
+        //成员禁言的通知
         @Override
-        public void onMuteListAdded(String groupId, final List<String> mutes, final long muteExpire) {
-            //成员禁言的通知
-        }
-
+        public void onMuteListAdded(String groupId, final List<String> mutes, final long muteExpire) {}
+        //成员从禁言列表里移除通知
         @Override
-        public void onMuteListRemoved(String groupId, final List<String> mutes) {
-            //成员从禁言列表里移除通知
-        }
-
+        public void onMuteListRemoved(String groupId, final List<String> mutes) {}
+        //增加管理员的通知
         @Override
-        public void onAdminAdded(String groupId, String administrator) {
-            //增加管理员的通知
-        }
-
+        public void onAdminAdded(String groupId, String administrator) {}
+        //管理员移除的通知
         @Override
-        public void onAdminRemoved(String groupId, String administrator) {
-            //管理员移除的通知
-        }
-
+        public void onAdminRemoved(String groupId, String administrator) {}
+        //群所有者变动通知
         @Override
-        public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {
-            //群所有者变动通知
-        }
+        public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {}
+        //群组加入新成员通知
         @Override
-        public void onMemberJoined(final String groupId,  final String member){
-            //群组加入新成员通知
-        }
+        public void onMemberJoined(final String groupId,  final String member){}
+        //群成员退出通知
         @Override
-        public void onMemberExited(final String groupId, final String member) {
-            //群成员退出通知
-        }
-
+        public void onMemberExited(final String groupId, final String member) {}
+        //群公告变动通知
         @Override
-        public void onAnnouncementChanged(String groupId, String announcement) {
-            //群公告变动通知
-        }
-
+        public void onAnnouncementChanged(String groupId, String announcement) {}
+        //增加共享文件的通知
         @Override
-        public void onSharedFileAdded(String groupId, EMMucSharedFile sharedFile) {
-            //增加共享文件的通知
-        }
-
+        public void onSharedFileAdded(String groupId, EMMucSharedFile sharedFile) {}
+        //群共享文件删除通知
         @Override
-        public void onSharedFileDeleted(String groupId, String fileId) {
-            //群共享文件删除通知
-        }
+        public void onSharedFileDeleted(String groupId, String fileId) {}
     };
 
     //数据更新
