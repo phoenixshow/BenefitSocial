@@ -26,7 +26,7 @@
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:text="保存"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textColor="@android:color/white"
             android:id="@+id/tv_pick_save"
             />
