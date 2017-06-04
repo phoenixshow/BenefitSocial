@@ -1,7 +1,11 @@
 package com.phoenix.social.controller.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +22,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private String mHxid;
     private EaseChatFragment easeChatFragment;
+    private LocalBroadcastManager mLBM;
+    private int mChatType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,15 +79,38 @@ public class ChatActivity extends AppCompatActivity {
                 return null;
             }
         });
+
+        //如果当前类型为群聊
+        if (mChatType == EaseConstant.CHATTYPE_GROUP){
+            //注册退群广播
+            BroadcastReceiver exitGroupReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (mHxid.equals(intent.getStringExtra(Constant.GROUP_ID))){
+                        //结束当前页面
+                        finish();
+                    }
+                }
+            };
+            mLBM.registerReceiver(exitGroupReceiver, new IntentFilter(Constant.EXIT_GROUP));
+        }
     }
 
     private void initData() {
         //创建一个会话的Fragment
         easeChatFragment = new EaseChatFragment();
         mHxid = getIntent().getStringExtra(EaseConstant.EXTRA_USER_ID);
+
+        //获取聊天类型
+        mChatType = getIntent().getExtras().getInt(EaseConstant.EXTRA_CHAT_TYPE);
+
         easeChatFragment.setArguments(getIntent().getExtras());
+
         //替换Fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fl_chat, easeChatFragment).commit();
+
+        //获取发送广播的管理者
+        mLBM = LocalBroadcastManager.getInstance(ChatActivity.this);
     }
 }

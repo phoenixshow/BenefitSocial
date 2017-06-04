@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -115,6 +116,28 @@ public class GroupDetailActivity extends AppCompatActivity {
         initView();
         getData();
         initData();
+        initListener();
+    }
+
+    private void initListener() {
+        gv_groupdetail.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        //判断当前是否是删除模式，如果是删除模式
+                        if (groupDetailAdapter.ismIsDeleteModel()){
+                            //切换为非删除模式
+                            groupDetailAdapter.setmIsDeleteModel(false);
+
+                            //刷新页面
+                            groupDetailAdapter.notifyDataSetChanged();
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     private void initData() {

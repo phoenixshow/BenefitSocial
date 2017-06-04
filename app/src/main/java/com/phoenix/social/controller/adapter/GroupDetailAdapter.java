@@ -30,6 +30,16 @@ public class GroupDetailAdapter extends BaseAdapter {
         mOnGroupDetailListener = onGroupDetailListener;
     }
 
+    //获取当前的删除模式
+    public boolean ismIsDeleteModel() {
+        return mIsDeleteModel;
+    }
+
+    //设置当前的删除模式
+    public void setmIsDeleteModel(boolean mIsDeleteModel) {
+        this.mIsDeleteModel = mIsDeleteModel;
+    }
+
     //刷新数据
     public void refresh(List<UserInfo> users){
         if (users != null && users.size() >= 0) {
