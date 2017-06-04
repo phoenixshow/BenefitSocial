@@ -27,6 +27,7 @@ public class GroupDetailAdapter extends BaseAdapter {
     public GroupDetailAdapter(Context context, boolean isCanModify, OnGroupDetailListener onGroupDetailListener) {
         mContext = context;
         mIsCanModify = isCanModify;
+        mOnGroupDetailListener = onGroupDetailListener;
     }
 
     //刷新数据
@@ -81,7 +82,7 @@ public class GroupDetailAdapter extends BaseAdapter {
         }
 
         //获取当前Item数据
-        UserInfo userInfo = mUsers.get(position);
+        final UserInfo userInfo = mUsers.get(position);
 
         //显示数据
         if (mIsCanModify){//群主或开放了群权限
@@ -135,14 +136,14 @@ public class GroupDetailAdapter extends BaseAdapter {
                 holder.photo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        mOnGroupDetailListener.onAddMembers();
                     }
                 });
             }else {//群成员
                 holder.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        mOnGroupDetailListener.onDeleteMembers(userInfo);
                     }
                 });
             }

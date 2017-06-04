@@ -19,13 +19,18 @@ import java.util.List;
 public class PickContactAdapter extends BaseAdapter {
     private Context mContext;
     private List<PickContactInfo> mPicks = new ArrayList<>();
+    private List<String> mExistMembers = new ArrayList<>();//保存群中已经存在的成员集合
 
-    public PickContactAdapter(Context context, List<PickContactInfo> picks) {
+    public PickContactAdapter(Context context, List<PickContactInfo> picks, List<String> existMembers) {
         mContext = context;
         if (picks != null && picks.size() >= 0) {
             mPicks.clear();
             mPicks.addAll(picks);
         }
+
+        //加载已经存在的成员集合
+        mExistMembers.clear();;
+        mExistMembers.addAll(existMembers);
     }
 
     @Override
@@ -62,6 +67,12 @@ public class PickContactAdapter extends BaseAdapter {
         //显示数据
         holder.tv_name.setText(pickContactInfo.getUser().getName());
         holder.cb.setChecked(pickContactInfo.isChecked());
+
+        //判断是否已经是群成员
+        if (mExistMembers.contains(pickContactInfo.getUser().getHxid())){
+            holder.cb.setChecked(true);
+            pickContactInfo.setChecked(true);
+        }
         return convertView;
     }
 

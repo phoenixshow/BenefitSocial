@@ -31,16 +31,81 @@ public class GroupDetailActivity extends AppCompatActivity {
     private List<UserInfo> mUsers;
     private GroupDetailAdapter groupDetailAdapter;
     private GroupDetailAdapter.OnGroupDetailListener mOnGroupDetailListener = new GroupDetailAdapter.OnGroupDetailListener() {
+        //添加群成员
         @Override
         public void onAddMembers() {
-
+            //跳转到选择联系人页面
+            Intent intent = new Intent(GroupDetailActivity.this, PickContactActivity.class);
+            //传递群ID
+            intent.putExtra(Constant.GROUP_ID, mGroup.getGroupId());
+            startActivityForResult(intent, 2);
         }
 
+        //删除群成员
         @Override
-        public void onDeleteMembers(UserInfo user) {
+        public void onDeleteMembers(final UserInfo user) {
+            Model.getInstance().getGlobalThreadPool().execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        //从环信服务器中删除此人
+                        EMClient.getInstance().groupManager().removeUserFromGroup(mGroup.getGroupId(), user.getHxid());
 
+                        //更新页面
+                        getMembersFromHxServer();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(GroupDetailActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (final HyphenateException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(GroupDetailActivity.this, "删除失败"+e.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK){
+            //获取返回的准备邀请的群成员信息
+            final String[] members = data.getStringArrayExtra("members");
+
+            Model.getInstance().getGlobalThreadPool().execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        //去环信服务器，发送邀请信息
+                        EMClient.getInstance().groupManager().addUsersToGroup(mGroup.getGroupId(), members);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(GroupDetailActivity.this, "发送邀请成功", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (final HyphenateException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(GroupDetailActivity.this, "发送邀请失败"+e.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

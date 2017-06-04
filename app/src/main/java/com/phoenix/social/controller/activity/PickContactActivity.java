@@ -9,14 +9,19 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroup;
 import com.phoenix.social.R;
 import com.phoenix.social.controller.adapter.PickContactAdapter;
 import com.phoenix.social.model.Model;
 import com.phoenix.social.model.bean.PickContactInfo;
 import com.phoenix.social.model.bean.UserInfo;
+import com.phoenix.social.utils.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.hyphenate.easeui.model.EaseDefaultEmojiconDatas.getData;
 
 //选择联系人界面
 public class PickContactActivity extends AppCompatActivity {
@@ -24,6 +29,7 @@ public class PickContactActivity extends AppCompatActivity {
     private ListView lv_pick;
     private List<PickContactInfo> mPicks;
     private PickContactAdapter pickContactAdapter;
+    private List<String> mExistMembers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +37,21 @@ public class PickContactActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pick_contact);
 
         initView();
+        getData();
         initData();
         initListener();
+    }
+
+    private void getData(){
+        String groupId = getIntent().getStringExtra(Constant.GROUP_ID);
+        if (groupId != null){
+            EMGroup group = EMClient.getInstance().groupManager().getGroup(groupId);
+            //获取群中已经存在的所有群成员
+            mExistMembers = group.getMembers();
+        }
+        if (mExistMembers == null){
+            mExistMembers = new ArrayList<>();
+        }
     }
 
     private void initListener() {
@@ -83,7 +102,7 @@ public class PickContactActivity extends AppCompatActivity {
                 mPicks.add(pickContactInfo);
             }
         }
-        pickContactAdapter = new PickContactAdapter(this, mPicks);
+        pickContactAdapter = new PickContactAdapter(this, mPicks, mExistMembers);
         lv_pick.setAdapter(pickContactAdapter);
     }
 
